@@ -3,7 +3,7 @@ var path = require('path');
 var router = express.Router();
 
 var sqlite3 = require('sqlite3').verbose()
-var db =  new sqlite3.Database(path.resolve(__dirname, '../db2.db'), (err) => {
+var db =  new sqlite3.Database(path.resolve(__dirname, '../db.db'), (err) => {
   if (err) {
     console.error(err.message);
   }
