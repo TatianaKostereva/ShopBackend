@@ -1,9 +1,9 @@
-var express = require('express');
-var path = require('path');
-var router = express.Router();
+const express = require('express');
+const path = require('path');
+const router = express.Router();
 
-var sqlite3 = require('sqlite3').verbose()
-var db =  new sqlite3.Database(path.resolve(__dirname, '../db.db'), (err) => {
+const sqlite3 = require('sqlite3').verbose()
+const db =  new sqlite3.Database(path.resolve(__dirname, '../db.db'), (err) => {
   if (err) {
     console.error(err.message);
   }
@@ -17,13 +17,11 @@ db.serialize(function (err) {
   })
 })
 
-
-
 console.log(db);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.send('Hello World!')
 });
 
 module.exports = router;
