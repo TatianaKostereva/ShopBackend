@@ -1,7 +1,6 @@
 const express = require('express');
-const promiseDecorator = require('../utils/promiseDecorator');
-const path = require('path');
 const router = express.Router();
+const path = require('path');
 
 const sqlite3 = require('sqlite3').verbose()
 const db =  new sqlite3.Database(path.resolve(__dirname, '../db.db'), (err) => {
@@ -11,18 +10,31 @@ const db =  new sqlite3.Database(path.resolve(__dirname, '../db.db'), (err) => {
   console.log('Connected to the chinook database.');
 });
 
+setTimeout(() => {
+
+}, 1000);
+
+
+
 db.serialize(function (err) {
-  const dbAll = promiseDecorator(db.all);
-  dbAll('SELECT * FROM users').then((row) => {
-    console.log(row, err);
+  db.all('SELECT * FROM products', function (err, rows) {
+    rows.forEach((row) => {
+      router.get(`/${row.id}`, function(req, res, next) {
+        res.send(`
+           Название:${row.title} \n\r
+           Цена:${row.price}
+        
+        `);
+      });
+    })
   })
 })
 
-console.log(db);
 
-/* GET home page. */
+
+/* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('Hello World!')
+  res.send('user');
 });
 
 module.exports = router;
