@@ -12,7 +12,7 @@ const db =  new sqlite3.Database(path.resolve(__dirname, '../db.db'), (err) => {
 });
 
 db.serialize(function (err) {
-  const dbAll = promiseDecorator(db.all);
+  const dbAll = promiseDecorator(db.all.bind(db));
   dbAll('SELECT * FROM users').then((row) => {
     console.log(row, err);
   })

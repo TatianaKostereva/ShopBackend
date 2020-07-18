@@ -10,12 +10,6 @@ const db =  new sqlite3.Database(path.resolve(__dirname, '../db.db'), (err) => {
   console.log('Connected to the chinook database.');
 });
 
-setTimeout(() => {
-
-}, 1000);
-
-
-
 db.serialize(function (err) {
   db.all('SELECT * FROM products', function (err, rows) {
     rows.forEach((row) => {
@@ -23,18 +17,18 @@ db.serialize(function (err) {
         res.send(`
            Название:${row.title} \n\r
            Цена:${row.price}
-        
         `);
       });
     })
   })
 })
 
-
-
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('user');
+router.get('/', async function(req, res, next) {
+  const dbAll = promiseDecorator(db.all.bind(db));
+  const products = await dbAll('SELECT * FROM products');
+
+  res.json(products);
 });
 
 module.exports = router;
