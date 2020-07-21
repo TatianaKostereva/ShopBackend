@@ -40,4 +40,21 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+app.options('*', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set("Access-Control-Allow-Headers", "Content-Type");
+  res.send('ok');
+});
+
+app.get('/products', async function (req, res) {
+  const dbAll = promiseDecorator(db.all.bind(db));
+  const products = await dbAll('SELECT * FROM products');
+
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, OPTIONS')
+  res.set('Access-Control-Allow-Headers', 'Content-Type')
+
+  res.send(products);
+})
+
 module.exports = app;
