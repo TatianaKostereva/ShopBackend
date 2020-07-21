@@ -14,9 +14,9 @@ const db =  new sqlite3.Database(path.resolve(__dirname, '../db.db'), (err) => {
 /* GET products listing. */
 router.get('/', async function(req, res, next) {
   const dbAll = promiseDecorator(db.all.bind(db));
-  const products = await dbAll('SELECT * FROM products');
+  const reviews = await dbAll('SELECT * FROM reviews');
 
-  res.json(products);
+  res.json(reviews);
 });
 
 module.exports = router;
