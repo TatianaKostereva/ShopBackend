@@ -11,7 +11,15 @@ const db =  new sqlite3.Database(path.resolve(__dirname, '../db.db'), (err) => {
   console.log('Connected to the chinook database.');
 });
 
+/* GET reviews listing. */
+router.get('/', async function(req, res, next) {
+  const dbAll = promiseDecorator(db.all.bind(db));
+  const reviews = await dbAll('SELECT * FROM reviews');
 
+  res.json(reviews);
+});
+
+/* GET reviews listing by id. */
 async function init() {
   router.get('/get_by_product/:id', async function(req, res, next) {
     const dbGet = promiseDecorator(db.all.bind(db));
@@ -26,7 +34,5 @@ async function init() {
 init().then(() => {
   console.log('reviews init');
 })
-/* GET products listing. */
-
 
 module.exports = router;
