@@ -1,15 +1,9 @@
-const express = require('express');
+const getRouter = require('../utils/getRouter');
+const getDB = require('../utils/getDB');
 const promiseDecorator = require('../utils/promiseDecorator');
-const path = require('path');
-const router = express.Router();
 
-const sqlite3 = require('sqlite3').verbose()
-const db =  new sqlite3.Database(path.resolve(__dirname, '../db.db'), (err) => {
-  if (err) {
-    console.error(err.message);
-  }
-  console.log('Connected to the chinook database.');
-});
+const router = getRouter();
+const db = getDB();
 
 db.serialize(function (err) {
   const dbAll = promiseDecorator(db.all.bind(db));

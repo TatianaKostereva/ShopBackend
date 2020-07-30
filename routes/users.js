@@ -1,28 +1,19 @@
+const express = require('express');
 const getRouter = require('../utils/getRouter');
+const getDB = require('../utils/getDB');
 
 const router = getRouter();
+const db = getDB();
 
-// const express = require('express');
-// const router = express.Router();
-// const path = require('path');
-//
-// const sqlite3 = require('sqlite3').verbose()
-// const db =  new sqlite3.Database(path.resolve(__dirname, '../db.db'), (err) => {
-//   if (err) {
-//     console.error(err.message);
-//   }
-//   console.log('Connected to the chinook database.');
-// });
-//
-// db.serialize(function (err) {
-//   db.all('SELECT * FROM users', function (err, rows) {
-//     rows.forEach((row) => {
-//       router.get(`/${row.id}`, function(req, res, next) {
-//         res.send('Пользователь: ' + row.name);
-//       });
-//     })
-//   })
-// })
+db.serialize(function (err) {
+  db.all('SELECT * FROM users', function (err, rows) {
+    rows.forEach((row) => {
+      router.get(`/${row.id}`, function(req, res, next) {
+        res.send('Пользователь: ' + row.name);
+      });
+    })
+  })
+})
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
