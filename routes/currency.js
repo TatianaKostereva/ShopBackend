@@ -28,4 +28,20 @@ init().then(() => {
   console.log('currency init');
 });
 
+/* GET currency listing from start to end */
+async function choice() {
+  router.get('/:start/:end', async function(req, res, next) {
+    const dbGet = promiseDecorator(db.all.bind(db));
+    const start = req.params.start;
+    const end = req.params.end;
+    const currency = await dbGet(`SELECT * FROM currency WHERE id BETWEEN ${start} AND ${end}`);
+
+    res.json(currency);
+  });
+}
+
+choice().then(() => {
+  console.log('currency choice');
+});
+
 module.exports = router;
