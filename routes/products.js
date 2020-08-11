@@ -13,4 +13,20 @@ router.get('/', async function(req, res, next) {
   res.json(products);
 });
 
+/* GET products listing from start to end */
+async function choice() {
+  router.get('/:start/:end', async function(req, res, next) {
+    const dbGet = promiseDecorator(db.all.bind(db));
+    const start = req.params.start;
+    const end = req.params.end;
+    const products = await dbGet(`SELECT * FROM products WHERE id BETWEEN ${start} AND ${end}`);
+
+    res.json(products);
+  });
+}
+
+choice().then(() => {
+  console.log('products choice');
+});
+
 module.exports = router;
