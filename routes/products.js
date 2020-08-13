@@ -18,10 +18,9 @@ async function choice() {
   const dbGet = promiseDecorator(db.all.bind(db));
 
   router.get('/load_by_ids/', async function(req, res, next) {
-    console.log(req);
+    //console.log(req);
     const products = await dbGet(`SELECT * FROM products WHERE id in (${req.query.ids.join(',')})`);
-
-    res.json([]);
+    res.json(products);
   });
 
   router.get('/:start/:end', async function(req, res, next) {
@@ -31,11 +30,7 @@ async function choice() {
 
     res.json(products);
   });
-
-
 }
-
-
 
 choice().then(() => {
   console.log('products choice');
