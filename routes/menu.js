@@ -8,7 +8,8 @@ const db = getDB();
 /* GET menu listing. */
 router.get('/', async function(req, res, next) {
   const dbAll = promiseDecorator(db.all.bind(db));
-  const menu = await dbAll('SELECT * FROM menu JOIN menu_children');
+  const menu = await dbAll('select * from menu join menu_children using(menu_id)');
+  const children = await dbAll('select * from children');
 
   res.json(menu);
 });
