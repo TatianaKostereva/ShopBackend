@@ -10,8 +10,8 @@ async function init() {
   const dbGet = promiseDecorator(db.all.bind(db));
 
   router.get('/load_by_ids/', async function(req, res, next) {
-    //console.log(req);
-    const reviews = await dbGet(`SELECT * FROM reviews WHERE product_id in (${req.query.ids.join(',')})`);
+    const ids = Array.isArray(req.query.ids) ? req.query.ids : [req.query.ids];
+    const reviews = await dbGet(`SELECT * FROM reviews WHERE product_id in (${ids})`);
     res.json(reviews);
   });
 
