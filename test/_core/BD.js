@@ -63,7 +63,7 @@ const BD = {
         author_id: 17,
       },
     ],
-    author: [
+    authors: [
       {
         id: 15,
         name: 'author 1',
@@ -76,7 +76,7 @@ const BD = {
       },
       {
         id: 18,
-        name: 'author 2',
+        name: 'author 4',
         date: '05.06.1980',
       },
     ],
