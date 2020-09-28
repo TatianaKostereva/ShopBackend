@@ -1,3 +1,3 @@
-const findItemById = (itemId, base) => base.find((item) => item.id === itemId);
+const findItemById = (itemId, list) => list.find((item) => item.id === itemId);
 
 module.exports = findItemById;

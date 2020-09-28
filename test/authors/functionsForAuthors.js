@@ -1,9 +1,7 @@
 const BD = require('../test/_core/BD');
-const allItems = require('../test/_core/_utils/getAllItems');
-const allAuthors = allItems(authors);
-const currentItem = require('../test/_core/_utils/findItemById');
+const createCRUD = require('../test/_core/entity/createCRUD');
 
-function createAuthor(id, name, date) {
+function createAuthor({name, date}) {
   const id = allAuthors[allAuthors.length - 1].id + 1;
 
   const newAuthor = {
@@ -14,17 +12,12 @@ function createAuthor(id, name, date) {
 
   BD.store.authors.push(newAuthor);
 }
-createAuthor(16, 'author 3', '12.06.1984');
-
-function readAuthor(authorId) {
-  return currentItem(authorId, allAuthors);
-}
-readAuthor(15);
+createAuthor({name: 'author 3', date: '12.06.1984'});
 
 function updateAuthor(authorId, name, date) {
-  const author = currentItem(authorId, allAuthors);
-  if (author.name !== name) author.name = name;
-  if (author.date !== date) author.date = date;
+  const author = readAuthor(authorId);
+  author.name = name;
+  author.date = date;
 }
 updateAuthor(15, 'author 33', '12.06.1987');
 
@@ -34,6 +27,8 @@ function deleteAuthor(authorId) {
   return true;
 }
 deleteAuthor(17);
+
+const crudComments = createCRUD('author');
 
 
 

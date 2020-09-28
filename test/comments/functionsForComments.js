@@ -1,8 +1,6 @@
 const BD = require('../test/_core/BD');
-const allItems = require('../test/_core/_utils/getAllItems');
-const allComments = allItems(comments);
-const allPosts = allItems(posts);
 const currentItem = require('../test/_core/_utils/findItemById');
+const createCRUD = require('../test/_core/entity/createCRUD');
 
 function createComment(postId, authorId, text, rate) {
   const id = allComments[allComments.length - 1].id + 1;
@@ -11,6 +9,12 @@ function createComment(postId, authorId, text, rate) {
     throw Error('не найден автор');
   }
 
+
+  const checkingPost = allPosts.find((post) => post.id === postId);
+  if (!checkingPost) {
+    throw Error('пост не найден');
+  };
+
   const newComment = {
     id,
     text,
@@ -18,19 +22,9 @@ function createComment(postId, authorId, text, rate) {
     author_id: authorId,
     post_id: postId,
   };
-  const checkingPost = allPosts.find((post) => post.id === postId);
-  if (!checkingPost) {
-    throw Error('пост не найден');
-  };
-
   allComments.push(newComment);
 }
 createComment(1, 17, 'text 3', 50);
-
-function readComment(commentId) {
-  return currentItem(commentId, allComments);
-}
-readComment(4);
 
 function findTopComment() {
   let topComment = allComments[0];
@@ -50,9 +44,4 @@ function updateComment(commentId, text, rate) {
 }
 updateComment(1, 'new text', 100);
 
-function deleteComment(commentId) {
-  const index = allComments.findIndex((item) => item.id === commentId);
-  allComments.splice(index, 1);
-  return true;
-}
-deleteComment(7);
+const crudComments = createCRUD('comments');
