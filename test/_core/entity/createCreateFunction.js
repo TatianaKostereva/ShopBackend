@@ -10,14 +10,14 @@ const createAuthor = (id, {name, date}) => {
   };
 }
 
-const checkPost = (postId) => {
+const checkPost = ({postId}) => {
   const checkingPost = allPosts.find((post) => post.id === postId);
   if (!checkingPost) {
     throw Error('пост не найден');
   }
 }
 
-const checkAuthor = (authorId) => {
+const checkAuthor = ({authorId}) => {
   const checkingPost = BD.store.authors.some((post) => post.id === authorId);
   if (!checkingPost) {
     throw Error('не найден автор');
@@ -47,7 +47,7 @@ const createComment = (id, {text, rate, authorId, postId}) => {
   };
 }
 
-const mapCreators = {
+const config = {
   'posts': {
     checks: [
       checkAuthor,
@@ -58,8 +58,27 @@ const mapCreators = {
       author_id: 'authorId',
     }
   },
-  'authors': createAuthor,
-  'comments': createComment,
+  'authors': {
+    checks: [],
+    fieldsMap: {
+      id: 'id',
+      name: 'name',
+      date: 'date',
+    }
+  },
+  'comments': {
+    checks: [
+      checkAuthor,
+      checkPost
+    ],
+    fieldsMap: {
+      id: 'id',
+      text: 'text',
+      rate: 'rate',
+      author_id: 'authorId',
+      post_id: 'postId',
+    }
+  }
 }
 
 const createCreateFunction = (listName) => {
@@ -67,7 +86,9 @@ const createCreateFunction = (listName) => {
   const id = list[list.length - 1].id + 1;
 
   return (data) => {
-    const item = mapCreators[listName](id, data);
+    config[list].checks.forEach(item => item(data));
+
+    const item = config[listName](id, data);
     list.push(item);
     return true;
   }
