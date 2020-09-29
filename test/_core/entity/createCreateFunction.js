@@ -2,16 +2,8 @@ const BD = require('../../_core/BD');
 const allItems = require('../_utils/getAllItems');
 const allPosts = allItems('posts');
 
-const createAuthor = (id, {name, date}) => {
-  return {
-    id,
-    name,
-    date,
-  };
-}
-
 const checkPost = ({postId}) => {
-  const checkingPost = allPosts.find((post) => post.id === postId);
+  const checkingPost = allPosts.some((post) => post.id === postId);
   if (!checkingPost) {
     throw Error('пост не найден');
   }
@@ -24,36 +16,12 @@ const checkAuthor = ({authorId}) => {
   }
 }
 
-const createPost = (id, {text, authorId}) => {
-  checkAuthor(authorId);
-
-  return {
-    id,
-    text,
-    author_id: authorId,
-  };
-}
-
-const createComment = (id, {text, rate, authorId, postId}) => {
-  checkAuthor(authorId);
-  checkPost(postId);
-
-  return {
-    id,
-    text,
-    rate: rate,
-    author_id: authorId,
-    post_id: postId,
-  };
-}
-
-const config = {
+const configs = {
   'posts': {
     checks: [
       checkAuthor,
     ],
     fieldsMap: {
-      id: 'id',
       text: 'text',
       author_id: 'authorId',
     }
@@ -61,7 +29,6 @@ const config = {
   'authors': {
     checks: [],
     fieldsMap: {
-      id: 'id',
       name: 'name',
       date: 'date',
     }
@@ -72,7 +39,6 @@ const config = {
       checkPost
     ],
     fieldsMap: {
-      id: 'id',
       text: 'text',
       rate: 'rate',
       author_id: 'authorId',
@@ -86,13 +52,20 @@ const createCreateFunction = (listName) => {
   const id = list[list.length - 1].id + 1;
 
   return (data) => {
-    config[list].checks.forEach(item => item(data));
+    const config = configs[list];
+    config.checks.forEach(item => item(data));
 
-    const item = config[listName](id, data);
-    list.push(item);
+    const newRecord = {
+      id: id,
+    };
+    Object.keys(config.fieldsMap).forEach(key => {
+      const value = config.fieldsMap[key];
+      newRecord[key] = data[value];
+    })
+
+    list.push(newRecord);
     return true;
   }
 }
-createCreateFunction('posts')({authorId: 17, text: 'text 3'})
 
 module.exports = createCreateFunction;

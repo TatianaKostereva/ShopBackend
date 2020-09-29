@@ -11,11 +11,10 @@ function findTopComment() {
   }
   return topComment;
 }
-findTopComment();
 
-const crudComments = createCRUD('comments');
+const crudComments = createCRUD('authors');
 
-const readComment = crudComments.read(1);
-const deleteComment = crudComments.delete(2);
-const updateComment = crudComments.update({id: 1, text: 'new text', rate: 500});
-const createComment = crudComments.create({postId: 1, authorId: 17, text: 'text 3', rate: 50});
+module.exports = {
+  findTopComment,
+  ...crudComments,
+};
