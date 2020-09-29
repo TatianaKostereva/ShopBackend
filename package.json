@@ -6,7 +6,8 @@
   "author": "Зубков Валерий Павлович <v.zubkov@bssys.com>",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon -V ./bin/www"
+    "start": "nodemon -V ./bin/www",
+    "test": "jest"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -15,6 +16,7 @@
     "debug": "~2.6.9",
     "express": "^4.17.1",
     "http-errors": "~1.6.3",
+    "jest": "^26.4.2",
     "morgan": "~1.9.1",
     "nodemon": "^2.0.4",
     "pug": "2.0.0-beta11",

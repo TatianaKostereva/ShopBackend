@@ -1,5 +1,5 @@
 const BD = require('../BD');
 
-const getAllItems = (baseName) => BD.store[baseName];
+const getAllItems = (listName) => BD.store[listName];
 
 module.exports = getAllItems;

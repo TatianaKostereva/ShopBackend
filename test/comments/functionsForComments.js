@@ -1,30 +1,6 @@
-const BD = require('../test/_core/BD');
-const currentItem = require('../test/_core/_utils/findItemById');
-const createCRUD = require('../test/_core/entity/createCRUD');
-
-function createComment(postId, authorId, text, rate) {
-  const id = allComments[allComments.length - 1].id + 1;
-
-  if (!BD.store.authors.some((author) => author.id === authorId)) {
-    throw Error('не найден автор');
-  }
-
-
-  const checkingPost = allPosts.find((post) => post.id === postId);
-  if (!checkingPost) {
-    throw Error('пост не найден');
-  };
-
-  const newComment = {
-    id,
-    text,
-    rate: rate,
-    author_id: authorId,
-    post_id: postId,
-  };
-  allComments.push(newComment);
-}
-createComment(1, 17, 'text 3', 50);
+const createCRUD = require('../_core/entity/createCRUD');
+const allItems = require('../_core/_utils/getAllItems');
+const allComments = allItems('comments');
 
 function findTopComment() {
   let topComment = allComments[0];
@@ -37,11 +13,9 @@ function findTopComment() {
 }
 findTopComment();
 
-function updateComment(commentId, text, rate) {
-  const comment = currentItem(commentId, allComments);
-  comment.text = text;
-  if (comment.rate !== rate) comment.rate = rate;
-}
-updateComment(1, 'new text', 100);
-
 const crudComments = createCRUD('comments');
+
+const readComment = crudComments.read(1);
+const deleteComment = crudComments.delete(2);
+const updateComment = crudComments.update({id: 1, text: 'new text', rate: 500});
+const createComment = crudComments.create({postId: 1, authorId: 17, text: 'text 3', rate: 50});
