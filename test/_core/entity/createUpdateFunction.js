@@ -1,22 +1,24 @@
+const configs = require('../../_core/configs');
 const allItems = require('../_utils/getAllItems');
 const findItemById = require('../_utils/findItemById');
 
 const createUpdateFunction = (listName) => {
   const list = allItems(listName);
 
-  return ({id, name, date, text, rate}) => {
+  return (data) => {
+    const { id } = data;
+    const config = configs[listName];
     const item = findItemById(id, list);
-    if (listName === 'authors') {
-      item.name = name;
-      item.date = date;
-    }
-    if (listName === 'posts' || listName === 'comments') {
-      item.text = text;
-    }
-    if (listName === 'comments') {
-      item.rate = rate;
-    }
-    return true;
+
+    config.fieldsMap.forEach(key => {
+      const value = key.replace(/[A-Z]/, function(letter) {return `_${letter.toLowerCase()}`});
+      if (data[value] === undefined) {
+        data[value] = item[value];
+      }
+      item[value] = data[value];
+    });
+
+    return item;
   }
 }
 

@@ -1,18 +1,16 @@
 const createCRUD = require('../_core/entity/createCRUD');
 const allItems = require('../_core/_utils/getAllItems');
-const allComments = allItems('comments');
-const allPosts = allItems('posts');
+const findItemById = require('../_core/_utils/findItemById');
+const POSTS = require('../_core/constants').POSTS;
+const COMMENTS = require('../_core/constants').COMMENTS;
+const allComments = allItems(COMMENTS);
+const allPosts = allItems(POSTS);
 
 function findPostByComment(comment) {
   const postId = allComments.find((item) => item === comment).post_id;
-  return allPosts.find((post) => post.id === postId);
+  return findItemById(postId, allPosts);
 }
 const comment = allComments[5];
 findPostByComment(comment);
 
-const crudPosts = createCRUD('posts');
-
-const readPosts = crudPosts.read(1);
-const deletePosts = crudPosts.delete(2);
-const updatePosts = crudPosts.update({id: 1, text: 'new text'});
-const createPosts = crudPosts.create({authorId: 17, text: 'text 3'});
+const crudPosts = createCRUD(POSTS);

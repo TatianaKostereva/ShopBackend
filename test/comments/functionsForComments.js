@@ -1,6 +1,7 @@
 const createCRUD = require('../_core/entity/createCRUD');
 const allItems = require('../_core/_utils/getAllItems');
-const allComments = allItems('comments');
+const COMMENTS = require('../_core/constants').COMMENTS;
+const allComments = allItems(COMMENTS);
 
 function findTopComment() {
   let topComment = allComments[0];
@@ -11,8 +12,9 @@ function findTopComment() {
   }
   return topComment;
 }
+findTopComment();
 
-const crudComments = createCRUD('authors');
+const crudComments = createCRUD(COMMENTS);
 
 module.exports = {
   findTopComment,

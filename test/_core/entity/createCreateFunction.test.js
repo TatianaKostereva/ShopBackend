@@ -1,18 +1,19 @@
+const BD = require('../../_core/BD');
 const createCreateFunction = require('./createCreateFunction');
 
 describe('Простые тест кейсы', () => {
   test('Создать пост', () => {
     expect(createCreateFunction('posts')({authorId: 17, text: 'text 3'}))
-      .toBe(true);
+      .toBe(BD.store.posts.find((item) => item.id === 3));
   });
 
   test('Добавить автора', () => {
     expect(createCreateFunction('authors')({name: 'author 3', date: '12.06.1984'}))
-      .toBe(true);
+      .toBe(BD.store.authors.find((item) => item.name === 'author 3'));
   });
 
   test('Добавить комментарий', () => {
     expect(createCreateFunction('comments')({postId: 1, authorId: 17, text: 'text 3', rate: 50}))
-      .toBe(true);
+      .toBe(BD.store.comments.find((item) => item.id === 8));
   });
 });
