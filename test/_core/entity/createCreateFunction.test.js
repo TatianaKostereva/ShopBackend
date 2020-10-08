@@ -17,3 +17,10 @@ describe('Простые тест кейсы', () => {
       .toBe(BD.store.comments.find((item) => item.id === 8));
   });
 });
+
+describe('Плохие тест кейсы', () => {
+  test('Создать пост', () => {
+    expect(() => createCreateFunction('posts')({authorId: 999, text: 'text 3'}))
+      .toThrow('не найден автор');
+  });
+});
