@@ -27,4 +27,9 @@ describe('Неуспешное прохождение', () => {
   test('Удалить комментарий, если передано невалидное id', () => {
     expect(createDeleteFunction('comments')(15)).toBe(false);
   });
+
+  test('Удалить пост, если передан невалидный список', () => {
+    expect(() => createDeleteFunction('music')(100)).toThrow('список не найден');
+  });
+
 });

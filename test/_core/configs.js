@@ -1,28 +1,49 @@
 const BD = require('./BD');
-const POSTS = require('./constants').POSTS;
-const allItems = require('./_utils/getAllItems');
-const allPosts = allItems(POSTS);
 
 const checkPost = ({postId}) => {
-  const checkingPost = allPosts.some((post) => post.id === postId);
+  const checkingPost = BD.store.posts.some((post) => post.id === postId);
   if (!checkingPost) {
     throw Error('пост не найден');
   }
 }
 
 const checkAuthor = ({authorId}) => {
-  const checkingAuthor = BD.store.authors.some((post) => post.id === authorId);
+  const checkingAuthor = BD.store.authors.some((item) => item.id === authorId);
   if (!checkingAuthor) {
     throw Error('не найден автор');
   }
 }
 
+const checkList = (listName) => {
+  const checkingList = BD.store[listName];
+  if (!checkingList) {
+    throw Error('список не найден');
+  }
+}
+
+const checkFieldsMap = (listName, data) => {
+  return configs[listName].fieldsMap.forEach(key => {
+    const value = key.replace(/[A-Z]/, function (letter) {
+      return `_${letter.toLowerCase()}`
+    });
+    for (let item in data) {
+      if (item !== value) {
+        throw Error('введены не все поля');
+      }
+    }
+  })
+}
+
 const configs = {
+  checks: [
+    checkList,
+    checkFieldsMap,
+  ],
   'posts': {
     checks: [
       checkAuthor,
     ],
-    fieldsMap: ['text', 'authorId']
+    fieldsMap: ['authorId', 'text']
   },
   'authors': {
     checks: [],
@@ -31,7 +52,7 @@ const configs = {
   'comments': {
     checks: [
       checkAuthor,
-      checkPost
+      checkPost,
     ],
     fieldsMap: ['text', 'rate', 'authorId', 'postId']
   }

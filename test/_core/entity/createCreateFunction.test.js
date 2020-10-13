@@ -19,8 +19,12 @@ describe('Простые тест кейсы', () => {
 });
 
 describe('Плохие тест кейсы', () => {
-  test('Создать пост', () => {
+  test('Создать пост, если передано невалидное id автора', () => {
     expect(() => createCreateFunction('posts')({authorId: 999, text: 'text 3'}))
       .toThrow('не найден автор');
+  });
+
+  test('Создать пост, если передан невалидный список', () => {
+    expect(() => createCreateFunction('music')({authorId: 17, text: 'text 3'})).toThrow('список не найден');
   });
 });

@@ -1,8 +1,8 @@
-const BD = require('../../_core/BD');
 const configs = require('../../_core/configs');
 const allItems = require('../_utils/getAllItems');
 
 const createCreateFunction = (listName) => {
+  configs.checks.forEach(item => item(listName));
   const list = allItems(listName);
   const id = list[list.length - 1].id + 1;
 
@@ -13,9 +13,10 @@ const createCreateFunction = (listName) => {
     const newRecord = {
       id: id,
     };
+    let value = '';
 
     config.fieldsMap.forEach(key => {
-      const value = key.replace(/[A-Z]/, function(letter) {return `_${letter.toLowerCase()}`});
+      value = key.replace(/[A-Z]/, function(letter) {return `_${letter.toLowerCase()}`});
       newRecord[value] = data[key];
     })
 
