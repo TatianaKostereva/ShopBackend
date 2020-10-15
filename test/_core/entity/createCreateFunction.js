@@ -4,7 +4,6 @@ const allItems = require('../_utils/getAllItems');
 const checkList = require('../../_core/checkList');
 
 const createCreateFunction = (listName) => {
-  checkList(listName);
   const list = allItems(listName);
   const config = configs.configs[listName];
   const checksList = config.checks.map(checks.createCheck);
@@ -28,4 +27,4 @@ const createCreateFunction = (listName) => {
   }
 }
 
-module.exports = createCreateFunction;
+module.exports = checkList(createCreateFunction);
