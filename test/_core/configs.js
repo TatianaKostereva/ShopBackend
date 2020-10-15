@@ -1,19 +1,11 @@
-const BD = require('./BD');
-
-const createCheck = (listOfChecking) => {
-  return (data) => {
-    const id = data[listOfChecking.fieldName];
-    const checking = BD.store[listOfChecking.entityName].some((item) => item.id === id);
-    if (!checking) {
-      throw Error(listOfChecking.errorMessage);
-    }
-  }
-}
+const checks = require('./checks');
+const types = checks.types;
 
 const configs = {
   'posts': {
     checks: [
       {
+        type: types.DEPENDENCY,
         entityName: 'authors',
         errorMessage: 'не найден автор',
         fieldName: 'authorId',
@@ -28,14 +20,21 @@ const configs = {
   'comments': {
     checks: [
       {
+        type: types.DEPENDENCY,
         entityName: 'authors',
         errorMessage: 'не найден автор',
         fieldName: 'authorId',
       },
       {
+        type: types.DEPENDENCY,
         entityName: 'posts',
         errorMessage: 'не найден пост',
         fieldName: 'postId',
+      },
+      {
+        type: types.REQUIRED,
+        errorMessage: 'не введен текст',
+        fieldName: 'text',
       },
     ],
     fieldsMap: ['text', 'rate', 'authorId', 'postId']
@@ -44,5 +43,4 @@ const configs = {
 
 module.exports = {
   configs,
-  createCheck,
 };

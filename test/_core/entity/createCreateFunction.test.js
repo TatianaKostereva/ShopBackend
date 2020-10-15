@@ -24,6 +24,11 @@ describe('Плохие тест кейсы', () => {
       .toThrow('не найден автор');
   });
 
+  test('Создать пост, если передано невалидное id автора', () => {
+    expect(() => createCreateFunction('comments')({postId: 1, authorId: 17, text: ''}))
+        .toThrow('не введен текст');
+  });
+
   test('Создать пост, если передан невалидный список', () => {
     expect(() => createCreateFunction('music')({authorId: 17, text: 'text 3'})).toThrow('список не найден');
   });
