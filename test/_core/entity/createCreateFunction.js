@@ -1,14 +1,16 @@
 const configs = require('../../_core/configs');
 const allItems = require('../_utils/getAllItems');
+const checkList = require('../../_core/checkList');
 
 const createCreateFunction = (listName) => {
-  configs.checks.forEach(item => item(listName));
+  checkList(listName);
   const list = allItems(listName);
-  const id = list[list.length - 1].id + 1;
 
   return (data) => {
-    const config = configs[listName];
-    config.checks.forEach(item => item(data));
+    const config = configs.configs[listName];
+    config.checks.forEach(listOfChecking => configs.createCheck(listOfChecking)(data));
+
+    const id = list[list.length - 1].id + 1;
 
     const newRecord = {
       id: id,

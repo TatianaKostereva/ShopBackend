@@ -1,47 +1,23 @@
 const BD = require('./BD');
 
-const checkPost = ({postId}) => {
-  const checkingPost = BD.store.posts.some((post) => post.id === postId);
-  if (!checkingPost) {
-    throw Error('пост не найден');
-  }
-}
-
-const checkAuthor = ({authorId}) => {
-  const checkingAuthor = BD.store.authors.some((item) => item.id === authorId);
-  if (!checkingAuthor) {
-    throw Error('не найден автор');
-  }
-}
-
-const checkList = (listName) => {
-  const checkingList = BD.store[listName];
-  if (!checkingList) {
-    throw Error('список не найден');
-  }
-}
-
-const checkFieldsMap = (listName, data) => {
-  return configs[listName].fieldsMap.forEach(key => {
-    const value = key.replace(/[A-Z]/, function (letter) {
-      return `_${letter.toLowerCase()}`
-    });
-    for (let item in data) {
-      if (item !== value) {
-        throw Error('введены не все поля');
-      }
+const createCheck = (listOfChecking) => {
+  return (data) => {
+    const id = data[listOfChecking.fieldName];
+    const checking = BD.store[listOfChecking.entityName].some((item) => item.id === id);
+    if (!checking) {
+      throw Error(listOfChecking.errorMessage);
     }
-  })
+  }
 }
 
 const configs = {
-  checks: [
-    checkList,
-    checkFieldsMap,
-  ],
   'posts': {
     checks: [
-      checkAuthor,
+      {
+        entityName: 'authors',
+        errorMessage: 'не найден автор',
+        fieldName: 'authorId',
+      },
     ],
     fieldsMap: ['authorId', 'text']
   },
@@ -51,11 +27,22 @@ const configs = {
   },
   'comments': {
     checks: [
-      checkAuthor,
-      checkPost,
+      {
+        entityName: 'authors',
+        errorMessage: 'не найден автор',
+        fieldName: 'authorId',
+      },
+      {
+        entityName: 'posts',
+        errorMessage: 'не найден пост',
+        fieldName: 'postId',
+      },
     ],
     fieldsMap: ['text', 'rate', 'authorId', 'postId']
   }
 }
 
-module.exports = configs;
+module.exports = {
+  configs,
+  createCheck,
+};
