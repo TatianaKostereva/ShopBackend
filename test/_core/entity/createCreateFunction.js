@@ -1,12 +1,12 @@
 const configs = require('../../_core/configs');
-const checks = require('../../_core/checks');
+const functions = require('../../_core/validateErrors/functions');
 const allItems = require('../_utils/getAllItems');
 const checkList = require('../../_core/checkList');
 
 const createCreateFunction = (listName) => {
   const list = allItems(listName);
   const config = configs.configs[listName];
-  const checksList = config.checks.map(checks.createCheck);
+  const checksList = config.checks.map(functions.createCheck);
 
   return (data) => {
     checksList.forEach(check => check(data));

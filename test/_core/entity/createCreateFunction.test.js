@@ -1,5 +1,6 @@
 const BD = require('../../_core/BD');
 const createCreateFunction = require('./createCreateFunction');
+const errors = require('../validateErrors/errors');
 
 describe('Простые тест кейсы', () => {
   test('Создать пост', () => {
@@ -21,7 +22,7 @@ describe('Простые тест кейсы', () => {
 describe('Плохие тест кейсы', () => {
   test('Создать пост, если передано невалидное id автора', () => {
     expect(() => createCreateFunction('posts')({authorId: 999, text: 'text 3'}))
-      .toThrow('не найден автор');
+      .toThrow(errors.dependency);
   });
 
   test('Создать пост, если передано невалидное id автора', () => {

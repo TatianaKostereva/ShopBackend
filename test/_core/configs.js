@@ -1,5 +1,4 @@
-const checks = require('./checks');
-const types = checks.types;
+const types = require('./validateErrors/constants');
 
 const configs = {
   'posts': {
