@@ -3,13 +3,13 @@ const functions = require('../../_core/validateErrors/functions');
 const allItems = require('../_utils/getAllItems');
 const checkList = require('../../_core/checkList');
 
-const createCreateFunction = (listName) => {
-  const list = allItems(listName);
+const createCreateFunction = async (listName) => {
+  const list = await allItems(listName);
   const config = configs.configs[listName];
-  const checksList = config.checks.map(functions.createCheck);
+  const checksList = () => config.checks.map(functions.createCheck);
 
   return (data) => {
-    checksList.forEach(check => check(data));
+    checksList(data);
 
     const id = list[list.length - 1].id + 1;
     const newRecord = {
@@ -26,5 +26,11 @@ const createCreateFunction = (listName) => {
     return list.find((item) => item.id === id);
   }
 }
+
+const createFunction = async () => await createCreateFunction('posts').then((res) => res({authorId: 17, text: 'text 3'})).then(console.log);
+
+createFunction().then(() => {
+  console.log('create successfully');
+});
 
 module.exports = checkList(createCreateFunction);

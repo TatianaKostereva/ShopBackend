@@ -83,6 +83,6 @@ const BD = {
   },
 };
 
-//const getStore = async () => BD.store;
+const getStore = async () => BD.store;
 
-module.exports = BD; // getStore;
+module.exports = getStore; // BD;

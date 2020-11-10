@@ -1,5 +1,8 @@
 const BD = require('../BD');
 
-const getAllItems = (listName) => BD.store[listName];
+const getAllItems = async (listName) => {
+  const getStore = await BD();
+  return await getStore[listName];
+}
 
 module.exports = getAllItems;

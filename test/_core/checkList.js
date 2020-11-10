@@ -1,16 +1,16 @@
 const BD = require('./BD');
 
-const checkList = (func) => {
+const checkList = async (func) => {
 
-  return (listName) => {
-    const checkingList = BD.store[listName];
+  return async (listName) => {
+    const getStore = await BD();
+    const checkingList = await getStore[listName];
+
     if (!checkingList) {
       throw Error('список не найден');
     }
     return func(listName);
   }
 }
-
-
 
 module.exports = checkList;

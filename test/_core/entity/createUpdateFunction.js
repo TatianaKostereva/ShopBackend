@@ -2,12 +2,12 @@ const configs = require('../../_core/configs');
 const allItems = require('../_utils/getAllItems');
 const findItemById = require('../_utils/findItemById');
 
-const createUpdateFunction = (listName) => {
-  const list = allItems(listName);
+const createUpdateFunction = async (listName) => {
+  const list = await allItems(listName);
 
   return (data) => {
     const { id } = data;
-    const config = configs[listName];
+    const config = configs.configs[listName];
     const item = findItemById(id, list);
 
     config.fieldsMap.forEach(key => {
@@ -21,5 +21,11 @@ const createUpdateFunction = (listName) => {
     return item;
   }
 }
+
+const updateFunction = async () => await createUpdateFunction('posts').then((res) => res({id: 1, text: 'new text'})).then(console.log);
+
+updateFunction().then(() => {
+  console.log('update successfully');
+});
 
 module.exports = createUpdateFunction;

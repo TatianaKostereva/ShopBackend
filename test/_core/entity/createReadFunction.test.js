@@ -3,7 +3,7 @@ const createReadFunction = require('./createReadFunction');
 
 describe('Успешное прохождение', () => {
   test('Показать пост', () => {
-    expect(createReadFunction('posts')(1)).toBe(BD.store.posts.find((item) => item.id === 1));
+    expect(createReadFunction('posts').then((res) => res(1)).toBe({ id: 1, text: 'text 1', author_id: 18 });
   });
 
   test('Показать автора', () => {
