@@ -4,11 +4,11 @@ const checkList = require('../../_core/checkList');
 
 const createDeleteFunction = async (listName) => {
   const list = await allItems(listName);
-  return async (id) => {
+  return (id) => {
     const index = findIndexById(id, list);
     if (index === -1) return false;
     list.splice(index, 1);
-    return await list;
+    return list;
   }
 }
 

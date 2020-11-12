@@ -2,34 +2,44 @@ const BD = require('../BD');
 const createDeleteFunction = require('./createDeleteFunction');
 
 describe('Простые тест кейсы', () => {
-  test('Удалить пост', () => {
-    expect(createDeleteFunction('posts')(2)).toStrictEqual(BD.store.posts.filter((item) => item.id !== 2));
+  test('Удалить пост', async () => {
+    const deletePost = await createDeleteFunction('posts');
+    const store = await BD();
+    expect(await deletePost(2)).toStrictEqual(store.posts.filter((item) => item.id !== 2));
   });
 
-  test('Удалить автора', () => {
-    expect(createDeleteFunction('authors')(17)).toStrictEqual(BD.store.authors.filter((item) => item.id !== 17));
+  test('Удалить автора', async () => {
+    const deleteAuthor = await createDeleteFunction('authors');
+    const store = await BD();
+    expect(await deleteAuthor(17)).toStrictEqual(store.authors.filter((item) => item.id !== 17));
   });
 
-  test('Удалить комментарий', () => {
-    expect(createDeleteFunction('comments')(2)).toStrictEqual(BD.store.comments.filter((item) => item.id !== 2));
+  test('Удалить комментарий', async () => {
+    const deleteComment = await createDeleteFunction('comments');
+    const store = await BD();
+    expect(await deleteComment(2)).toStrictEqual(store.comments.filter((item) => item.id !== 2));
   });
 });
 
 describe('Неуспешное прохождение', () => {
-  test('Удалить пост, если передано невалидное id', () => {
-    expect(createDeleteFunction('posts')(100)).toBe(false);
+  test('Удалить пост, если передано невалидное id', async () => {
+    const deletePost = await createDeleteFunction('posts');
+    expect(await deletePost(100)).toBe(false);
   });
 
-  test('Удалить автора, если передано невалидное id', () => {
-    expect(createDeleteFunction('authors')(19)).toBe(false);
+  test('Удалить автора, если передано невалидное id', async () => {
+    const deleteAuthor = await createDeleteFunction('authors');
+    expect(await deleteAuthor(19)).toBe(false);
   });
 
-  test('Удалить комментарий, если передано невалидное id', () => {
-    expect(createDeleteFunction('comments')(15)).toBe(false);
+  test('Удалить комментарий, если передано невалидное id', async () => {
+    const deleteComment = await createDeleteFunction('comments');
+    expect(await deleteComment(15)).toBe(false);
   });
 
-  test('Удалить пост, если передан невалидный список', () => {
-    expect(() => createDeleteFunction('music')(100)).toThrow('список не найден');
+  test('Удалить пост, если передан невалидный список', async () => {
+    const createOtherList = await createDeleteFunction('music');
+    expect(await createOtherList(100)).toThrow('список не найден');
   });
 
 });

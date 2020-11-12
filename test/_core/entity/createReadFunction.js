@@ -1,11 +1,12 @@
 const allItems = require('../_utils/getAllItems');
 const findItemById = require('../_utils/findItemById');
+const checkList = require('../../_core/checkList');
 
 const createReadFunction = async (listName) => {
   const list = await allItems(listName);
 
-  return async (id) => {
-    return await findItemById(id, list);
+  return (id) => {
+    return findItemById(id, list);
   }
 }
 
@@ -15,4 +16,4 @@ readFunction().then(() => {
   console.log('read successfully');
 });
 
-module.exports = createReadFunction;
+module.exports = checkList(createReadFunction);

@@ -3,7 +3,7 @@ const dependencyError = require('./errors').dependency;
 const requiredError = require('./errors').requirement;
 const types = require('./constants');
 
-const dependencyCheck = async (checkConfig) => async (data) => {
+const dependencyCheck = (checkConfig) => async (data) => {
   const getStore = await BD();
   const id = data[checkConfig.fieldName];
   const checking = getStore[checkConfig.entityName].some((item) => item.id === id);

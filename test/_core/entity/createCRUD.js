@@ -3,12 +3,12 @@ const createDeleteFunction = require('./createDeleteFunction');
 const createUpdateFunction = require('./createUpdateFunction');
 const createCreateFunction = require('./createCreateFunction');
 
-const createCRUD = (listName) => {
+const createCRUD = async (listName) => {
     return {
-        create: createCreateFunction(listName),
+        create: await createCreateFunction(listName),
         read: createReadFunction(listName),
         update: createUpdateFunction(listName),
-        delete: createDeleteFunction(listName),
+        delete: await createDeleteFunction(listName),
     }
 }
 

@@ -2,29 +2,38 @@ const BD = require('../BD');
 const createReadFunction = require('./createReadFunction');
 
 describe('Успешное прохождение', () => {
-  test('Показать пост', () => {
-    expect(createReadFunction('posts').then((res) => res(1)).toBe({ id: 1, text: 'text 1', author_id: 18 });
+  test('Показать пост', async () => {
+    const readPost = await createReadFunction('posts');
+    const store = await BD();
+    expect(await readPost(1)).toBe(store.posts.find((item) => item.id === 1));
   });
 
-  test('Показать автора', () => {
-    expect(createReadFunction('authors')(15)).toBe(BD.store.authors.find((item) => item.id === 15));
+  test('Показать автора', async () => {
+    const readAuthor = await createReadFunction('authors');
+    const store = await BD();
+    expect(await readAuthor(15)).toBe(store.authors.find((item) => item.id === 15));
   });
 
-  test('Показать комментарий', () => {
-    expect(createReadFunction('comments')(1)).toBe(BD.store.comments.find((item) => item.id === 1));
+  test('Показать комментарий', async () => {
+    const readComment = await createReadFunction('comments');
+    const store = await BD();
+    expect(await readComment(1)).toBe(store.comments.find((item) => item.id === 1));
   });
 });
 
-describe('Неуспешное прохождение', () => {
-  test('Показать пост, если передано невалидное id', () => {
-    expect(createReadFunction('posts')(100)).toBeUndefined();
+describe('Неуспешное прохождение',() => {
+  test('Показать пост, если передано невалидное id', async () => {
+    const readPost = await createReadFunction('posts');
+    expect(await readPost(100)).toBeUndefined();
   });
 
-  test('Показать автора, если передано невалидное id', () => {
-    expect(createReadFunction('authors')(19)).toBeUndefined();
+  test('Показать автора, если передано невалидное id', async () => {
+    const readAuthor = await createReadFunction('authors');
+    expect(await readAuthor(19)).toBeUndefined();
   });
 
-  test('Показать комментарий, если передано невалидное id', () => {
-    expect(createReadFunction('comments')(15)).toBeUndefined();
+  test('Показать комментарий, если передано невалидное id', async () => {
+    const readComment = await createReadFunction('comments');
+    expect(await readComment(15)).toBeUndefined();
   });
 });

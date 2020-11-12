@@ -1,6 +1,7 @@
 const configs = require('../../_core/configs');
 const allItems = require('../_utils/getAllItems');
 const findItemById = require('../_utils/findItemById');
+const checkList = require('../../_core/checkList');
 
 const createUpdateFunction = async (listName) => {
   const list = await allItems(listName);
@@ -28,4 +29,4 @@ updateFunction().then(() => {
   console.log('update successfully');
 });
 
-module.exports = createUpdateFunction;
+module.exports = checkList(createUpdateFunction);

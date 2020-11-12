@@ -6,10 +6,11 @@ const checkList = require('../../_core/checkList');
 const createCreateFunction = async (listName) => {
   const list = await allItems(listName);
   const config = configs.configs[listName];
-  const checksList = () => config.checks.map(functions.createCheck);
 
   return (data) => {
-    checksList(data);
+    config.checks.map(functions.createCheck).map(async (func) => {
+      await func(data);
+    });
 
     const id = list[list.length - 1].id + 1;
     const newRecord = {
@@ -27,7 +28,7 @@ const createCreateFunction = async (listName) => {
   }
 }
 
-const createFunction = async () => await createCreateFunction('posts').then((res) => res({authorId: 17, text: 'text 3'})).then(console.log);
+const createFunction = async () => await createCreateFunction('posts').then((res) => res({authorId: 999, text: 'text 3'})).then(console.log);
 
 createFunction().then(() => {
   console.log('create successfully');
