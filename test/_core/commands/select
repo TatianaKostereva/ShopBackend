@@ -1,0 +1,39 @@
+const allItems = require('../_utils/getAllItems');
+
+const select = () => {
+  return obj;
+}
+
+const obj = {
+  table: null,
+  value: null,
+  field: null,
+  findTable: async function (listName) {
+    this.table = await allItems(listName);
+    return this;
+  },
+  where: async function (cb) {
+    this.value = await this.table.find(cb)
+    return this;
+  },
+  findField: function (name) {
+    this.field = name;
+    return this;
+  },
+  run: function () {
+    return this.value[this.field];
+  }
+}
+
+// const rows = select()
+//   .fields('text')
+//   .where(({author_id}) => author_id === 18)
+//   .table('posts')
+//   .run();
+
+const field = select()
+  .findTable('posts')
+  .then(res => res.where(({author_id}) => author_id === 18)
+    .then(res => res.findField('text'))
+    .then(res => res.run())
+    .then(console.log));
