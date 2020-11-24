@@ -7,10 +7,10 @@ const createCreateFunction = async (listName) => {
   const list = await allItems(listName);
   const config = configs.configs[listName];
 
-  return (data) => {
-    config.checks.map(functions.createCheck).map(async (func) => {
+  return async (data) => {
+    await Promise.all(config.checks.map(functions.createCheck).map(async (func) => {
       await func(data);
-    });
+    }));
 
     const id = list[list.length - 1].id + 1;
     const newRecord = {
