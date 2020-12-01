@@ -1,39 +1,33 @@
 const allItems = require('../_utils/getAllItems');
 
 const select = () => {
-  return obj;
+  return {
+    _tableName: null,
+    _value: null,
+    _field: null,
+    table: function (tableName) {
+      this._tableName = tableName;
+      return this;
+    },
+    where: function (condition) {
+      this._condition = condition;
+      return this;
+    },
+    field: function (name) {
+      this._field = name;
+      return this;
+    },
+    run: async function () {
+      this._table = await allItems(this._tableName);
+      this._value = await this._table.find(this._condition);
+      return this._value[this._field];
+    }
+  };
 }
-
-const obj = {
-  table: null,
-  value: null,
-  field: null,
-  findTable: async function (listName) {
-    this.table = await allItems(listName);
-    return this;
-  },
-  where: async function (cb) {
-    this.value = await this.table.find(cb)
-    return this;
-  },
-  findField: function (name) {
-    this.field = name;
-    return this;
-  },
-  run: function () {
-    return this.value[this.field];
-  }
-}
-
-// const rows = select()
-//   .fields('text')
-//   .where(({author_id}) => author_id === 18)
-//   .table('posts')
-//   .run();
 
 const field = select()
-  .findTable('posts')
-  .then(res => res.where(({author_id}) => author_id === 18)
-    .then(res => res.findField('text'))
-    .then(res => res.run())
-    .then(console.log));
+  .table('posts')
+  .where(({author_id}) => author_id === 18)
+  .field('text')
+  .run()
+  .then(console.log);

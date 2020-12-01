@@ -2,41 +2,43 @@ const allItems = require('../_utils/getAllItems');
 const configs = require('../../_core/configs');
 
 const insert = () => {
-  return obj;
-}
+  return {
+    _tableName: null,
+    _table: null,
+    _params: null,
+    table: function (tableName) {
+      this._tableName = tableName;
+      return this;
+    },
+    data: function (params) {
+      this._params = params;
+      return this;
+    },
+    run: async function () {
+      this._table = await allItems(this._tableName);
+      const config = configs.configs[this._tableName];
+      const id = this._table[this._table.length - 1].id + 1;
+      const newRecord = {
+        id: id,
+      };
+      let value = '';
 
-const obj = {
-  listName: null,
-  table: null,
-  findTable: async function (listName) {
-    this.listName = listName;
-    this.table = await allItems(listName);
-    return this;
-  },
-  createRow: function (params) {
-    const config = configs.configs[this.listName];
-    const id = this.table[this.table.length - 1].id + 1;
-    const newRecord = {
-      id: id,
-    };
-    let value = '';
+      config.fieldsMap.forEach(key => {
+        value = key.replace(/[A-Z]/, function (letter) {
+          return `_${letter.toLowerCase()}`
+        });
+        newRecord[value] = this._params[key];
+      })
 
-    config.fieldsMap.forEach(key => {
-      value = key.replace(/[A-Z]/, function(letter) {return `_${letter.toLowerCase()}`});
-      newRecord[value] = params[key];
-    })
-
-    this.table.push(newRecord);
-    return this;
-  },
-  run: function () {
-  return this.table;
-  }
+      this._table.push(newRecord);
+      return this._table;
+    }
+  };
 }
 
 const table = insert()
-  .findTable('posts')
-  .then(res => res.createRow({authorId: 17, text: 'text 3'}))
-  .then(res => res.run())
+  .table('posts')
+  .data({authorId: 17, text: 'text 3'})
+  .run()
   .then(console.log);
 

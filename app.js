@@ -52,16 +52,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// queryString.parse('foo[]=1&foo[]=2&foo[]=3', {arrayFormat: 'bracket'});
-// queryString.parse('foo[0]=1&foo[1]=2&foo[3]=3', {arrayFormat: 'index'});
-// queryString.parse('foo=1,2,3', {arrayFormat: 'comma'});
-// queryString.parse('foo=1|2|3', {arrayFormat: 'separator', arrayFormatSeparator: '|'});
-// queryString.parse('foo=1&foo=2&foo=3');
-// queryString.parse('foo=1', {parseNumbers: true});
-// queryString.parse('foo=true', {parseBooleans: true});
-// queryString.stringify({foo: [1, 2, 3]}, {arrayFormat: 'bracket'});
-// queryString.stringify({foo: [1, 2, 3]}, {arrayFormat: 'index'});
-// queryString.stringify({foo: [1, 2, 3]}, {arrayFormat: 'comma'});
-// queryString.stringify({foo: [1, 2, 3]});
-
 module.exports = app;

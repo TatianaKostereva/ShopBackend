@@ -11,7 +11,8 @@ async function init() {
 
   router.get('/load_by_ids/', async function(req, res, next) {
     const ids = Array.isArray(req.query.ids) ? req.query.ids : [req.query.ids];
-    const reviews = await dbGet(`SELECT * FROM reviews WHERE product_id in (${ids})`);
+    const reviews = await dbGet(`SELECT * FROM reviews WHERE product_id in (${ids.join()})`);
+
     res.json(reviews);
   });
 
