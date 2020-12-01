@@ -2,29 +2,44 @@ const BD = require('../../_core/BD');
 const createCreateFunction = require('./createCreateFunction');
 const errors = require('../validateErrors/errors');
 
+const checkRecord = (newRecord) => (storeRecord) => {
+  return Object.keys(newRecord).every(key => {
+    return newRecord[key] === storeRecord[key.replace(/[A-Z]/,
+      function(letter) {
+      return `_${letter.toLowerCase()}`;
+    })]
+  });
+}
+
 describe('Простые тест кейсы', () => {
   test('Создать пост', async () => {
     const createPost = await createCreateFunction('posts');
     const store = await BD();
 
-    expect(await createPost({authorId: 17, text: 'text 3'}))
-      .toBe(store.posts.find((item) => item.id === 4));
+    const newRecord = {authorId: 17, text: 'text 3'};
+    await createPost(newRecord);
+
+    expect(store.posts.some(checkRecord(newRecord))).toBeTruthy();
   });
 
   test('Добавить автора', async () => {
     const createAuthor = await createCreateFunction('authors');
     const store = await BD();
 
-    expect(await createAuthor({name: 'author 3', date: '12.06.1984'}))
-      .toBe(store.authors.find((item) => item.name === 'author 3'));
+    const newRecord = {name: 'author 3', date: '12.06.1984'};
+    await createAuthor(newRecord);
+
+    expect(store.authors.some(checkRecord(newRecord))).toBeTruthy();
   });
 
   test('Добавить комментарий', async () => {
     const createComment = await createCreateFunction('comments');
     const store = await BD();
 
-    expect(await createComment({postId: 1, authorId: 17, text: 'text 3', rate: 50}))
-      .toBe(store.comments.find((item) => item.id === 8));
+    const newRecord = {postId: 1, authorId: 17, text: 'text 3', rate: 50};
+    await createComment(newRecord);
+
+    expect(store.comments.some(checkRecord(newRecord))).toBeTruthy();
   });
 });
 
@@ -32,19 +47,19 @@ describe('Плохие тест кейсы', () => {
   test('Создать пост, если передано невалидное id автора', async () => {
     const createPost = await createCreateFunction('posts');
 
-    expect(async () => await createPost({authorId: 999, text: 'text 3'}))
-      .toThrow(errors.dependency);
+    await expect(createPost({authorId: 999, text: 'text 3'}))
+      .rejects.toThrow(errors.dependency);
   });
 
   test('Создать пост, если передано невалидное id автора', async () => {
     const createComment = await createCreateFunction('comments');
 
-    expect(async () => await createComment({postId: 1, authorId: 17, text: ''}))
-        .toThrow('не введен текст');
+    await expect(createComment({postId: 1, authorId: 17, text: ''}))
+      .rejects.toThrow('не введен текст');
   });
 
   test('Создать пост, если передан невалидный список', async () => {
-    const createOtherList = await createCreateFunction('music');
-    expect(async () => await createOtherList({authorId: 17, text: 'text 3'})).toThrow('список не найден');
+    await expect(createCreateFunction('music'))
+      .rejects.toThrow('список не найден');
   });
 });

@@ -38,8 +38,7 @@ describe('Неуспешное прохождение', () => {
   });
 
   test('Удалить пост, если передан невалидный список', async () => {
-    const createOtherList = await createDeleteFunction('music');
-    expect(await createOtherList(100)).toThrow('список не найден');
+    await expect(createDeleteFunction('music'))
+      .rejects.toThrow('список не найден');
   });
-
 });
