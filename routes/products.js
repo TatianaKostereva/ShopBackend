@@ -18,7 +18,6 @@ async function choice() {
   const dbGet = promiseDecorator(db.all.bind(db));
 
   router.get('/load_by_ids/', async function(req, res, next) {
-    //console.log(req);
     const products = await dbGet(`SELECT * FROM products WHERE id in (${req.query.ids.join(',')})`);
     res.json(products);
   });
@@ -27,8 +26,12 @@ async function choice() {
     const start = req.params.start;
     const end = req.params.end;
     const products = await dbGet(`SELECT * FROM products WHERE id BETWEEN ${start} AND ${end}`);
-
     res.json(products);
+  });
+
+  router.get('/productsForMain/', async function(req, res, next) {
+    const idForTopRecomendation = await dbGet(`SELECT id FROM products ORDER BY reviewsAmount DESC LIMIT 15`);
+    res.json(idForTopRecomendation);
   });
 }
 
