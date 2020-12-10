@@ -30,8 +30,8 @@ async function choice() {
   });
 
   router.get('/productsForMain/', async function(req, res, next) {
-    const idForTopRecomendation = await dbGet(`SELECT id FROM products ORDER BY reviewsAmount DESC LIMIT 15`);
-    res.json(idForTopRecomendation);
+    const idForTopRecommendation = await dbGet(`SELECT id FROM products ORDER BY reviewsAmount DESC LIMIT 15`);
+    res.json(idForTopRecommendation.map(({id}) => id));
   });
 }
 
