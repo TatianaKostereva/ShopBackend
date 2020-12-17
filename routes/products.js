@@ -18,7 +18,8 @@ async function choice() {
   const dbGet = promiseDecorator(db.all.bind(db));
 
   router.get('/load_by_ids/', async function(req, res, next) {
-    const products = await dbGet(`SELECT * FROM products WHERE id in (${req.query.ids.join(',')})`);
+    const ids = Array.isArray(req.query.ids) ? req.query.ids : [req.query.ids];
+    const products = await dbGet(`SELECT * FROM products WHERE id in (${ids.join(',')})`);
     res.json(products);
   });
 
