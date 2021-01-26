@@ -13,6 +13,7 @@ const reviewsRouter = require('./routes/reviews');
 const currencyRouter = require('./routes/currency');
 const slidesRouter = require('./routes/slides');
 const menuRouter = require('./routes/menu');
+const newsRouter = require('./routes/news');
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use('/reviews', reviewsRouter);
 app.use('/currency', currencyRouter);
 app.use('/slides', slidesRouter);
 app.use('/menu', menuRouter);
+app.use('/news', newsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
